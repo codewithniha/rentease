@@ -10,11 +10,11 @@ async def startup_event():
     init_db()
     print("✅ Database initialized successfully!")
 
-app.include_router(auth.router)
-app.include_router(tenant.router)
-app.include_router(landlord.router)
-app.include_router(booking.router)
-app.include_router(favorite.router)
+app.include_router(auth.router, prefix="/api")
+app.include_router(tenant.router, prefix="/api")
+app.include_router(landlord.router, prefix="/api")
+app.include_router(booking.router, prefix="/api")
+app.include_router(favorite.router, prefix="/api")
 
 @app.get("/")
 def root():
