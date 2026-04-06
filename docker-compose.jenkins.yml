@@ -1,4 +1,28 @@
-backend_jenkins:
+version: '3.8'
+
+services:
+
+  # ─── PostgreSQL Database ───────────────────────────────────────────
+  db_jenkins:
+    image: postgres:15-alpine
+    container_name: jenkins_rentease_db        # Different container name
+    restart: always
+    environment:
+      POSTGRES_USER: rentease_user
+      POSTGRES_PASSWORD: RentEase123
+      POSTGRES_DB: rentease
+    volumes:
+      - jenkins_postgres_data:/var/lib/postgresql/data
+    networks:
+      - jenkins_rentease_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rentease_user -d rentease"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ─── FastAPI Backend (volume mount instead of Dockerfile build) ────
+  backend_jenkins:
     image: python:3.12-slim
     container_name: jenkins_rentease_backend
     working_dir: /app
@@ -19,3 +43,28 @@ backend_jenkins:
         condition: service_healthy
     networks:
       - jenkins_rentease_network
+
+  # ─── React Frontend (volume mount instead of Dockerfile build) ─────
+  frontend_jenkins:
+    image: node:20-alpine                      # Base image directly
+    container_name: jenkins_rentease_frontend  # Different container name
+    working_dir: /app
+    volumes:
+      - ./frontend:/app                        # Mount code as volume
+    command: >
+      sh -c "npm install && npm run build &&
+             npx serve -s dist -l 3000"
+    ports:
+      - "8080:3000"                            # Different port (8080 not 80)
+    depends_on:
+      - backend_jenkins
+    networks:
+      - jenkins_rentease_network
+
+volumes:
+  jenkins_postgres_data:
+    driver: local
+
+networks:
+  jenkins_rentease_network:
+    driver: bridge
