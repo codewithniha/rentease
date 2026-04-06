@@ -11,7 +11,7 @@ pipeline {
         stage('Clone Repository') {
             steps {
                 echo 'Cloning RentEase repository from GitHub...'
-                git branch: 'main',
+                git branch: 'master',
                     url: 'https://github.com/codewithniha/rentease.git'
                 echo 'Code cloned successfully!'
             }
