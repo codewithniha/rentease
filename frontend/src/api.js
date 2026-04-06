@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:8000/api';
+const API_BASE_URL = 'http://15.206.158.180:8001/api';
 
 /**
  * Make an authenticated API request
