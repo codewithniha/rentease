@@ -53,7 +53,7 @@ services:
       sh -c "npm install && npm run build &&
              npx serve -s dist -l 3000"
     ports:
-      - "9000:3000"                            # Different port (8080 not 80)
+      - "9000:3000"                            
     depends_on:
       - backend_jenkins
     networks:
