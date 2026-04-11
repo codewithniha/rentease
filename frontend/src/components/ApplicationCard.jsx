@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Card, Badge, Button } from 'react-bootstrap';
-
+// checking jenkins
 const ApplicationCard = ({ application, isLandlord = false, onStatusUpdate }) => {
   const getStatusVariant = (status) => {
     switch (status) {
