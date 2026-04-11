@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        COMPOSE_FILE = 'docker-compose.jenkins.yml'
+        COMPOSE_FILE = 'docker-compose.yml'
         PROJECT_NAME = 'rentease_jenkins'
     }
 
