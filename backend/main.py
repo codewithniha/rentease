@@ -1,8 +1,17 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from database import init_db
 from routers import auth, tenant, landlord, booking, favorite
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.on_event("startup")
 async def startup_event():
@@ -10,11 +19,11 @@ async def startup_event():
     init_db()
     print("✅ Database initialized successfully!")
 
-app.include_router(auth.router)
-app.include_router(tenant.router)
-app.include_router(landlord.router)
-app.include_router(booking.router)
-app.include_router(favorite.router)
+app.include_router(auth.router, prefix="/api")
+app.include_router(tenant.router, prefix="/api")
+app.include_router(landlord.router, prefix="/api")
+app.include_router(booking.router, prefix="/api")
+app.include_router(favorite.router, prefix="/api")
 
 @app.get("/")
 def root():
